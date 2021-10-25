@@ -127,3 +127,11 @@ FROM employees;
 SELECT COUNT(*)
 FROM employees
 WHERE department_id=90;
+
+#计算产品线平均购买价格的平均买价
+SELECT AVG(pl_avg) 'Average Product'
+FROM (
+    SELECT AVG(buyprice) pl_avg
+    FROM products
+    GROUP BY productline
+) avgs;

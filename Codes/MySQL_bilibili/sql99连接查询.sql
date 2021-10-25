@@ -51,6 +51,27 @@ LEFT OUTER JOIN boys bo
 ON b.`boyfriend_id` = bo.`id`
 WHERE bo.`id` IS NULL;  #没有group不用having
 
+#查询编号>3的女生男朋友信息，如果有列出，没有用null链接
+SELECT b.id, b.name, b.*
+FROM beauty b
+LEFT OUTER JOIN boys bo
+ON b.`boyfriend_id` = bo.`id`
+WHERE b.`id`>3;
+
+#查询哪个城市没有部门
+SELECT city, d.*
+FROM departments d
+RIGHT OUTER JOIN locations l
+ON d.`location_id` = l.`location_id`
+WHERE d.`department_id` IS NULL;
+
+#查询部门名为SAL或IT的员工信息
+SELECT e.*, d.department_name
+FROM departments d
+LEFT JOIN employees e
+ON d.`department_id` = e.`department_id`
+WHERE d.`department_name` IN('SAL', 'IT');
+
 #右外
 SELECT b.name, #bo.* 
 FROM boys bo
@@ -73,3 +94,33 @@ WHERE e.`employee_id` IS NULL;
 SELECT b.*, bo.*
 FROM beauty b
 CROSS JOIN boys bo;
+
+
+#------------------------
+#查询姓张的学生中最低分大于60的学号姓名
+SELECT s.studentno, s.studentname, MIN(score)
+FROM student s
+JOIN result r
+ON s.studentno = r.studentno
+WHERE s.studentname LIKE '张%'
+GROUP BY s.studentno
+HAVING MIN(score)>60;
+
+#查询学生名、专业名、分数
+SELECT studentname, score, majorname
+FROM student s
+JOIN major m ON s.majorid = m.majorid
+LEFT JOIN result r ON s.studentno = r.studentno
+
+#查询哪个专业没有学生
+#左连
+SELECT m.*, s.studentno
+FROM major m
+LEFT JOIN student s ON m.majorid = s.student = s.majorid
+WHERE s.studentno IS NULL;
+
+#查询没有成绩的学生人数
+SELECT COUNT(*)
+FROM student s
+LEFT JOIN result r ON s.studentno = r.studentno
+WHERE r.id IS NULL;
