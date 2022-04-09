@@ -135,3 +135,7 @@ FROM (
     FROM products
     GROUP BY productline
 ) avgs;
+
+#  OrderPrice 值高于 OrderPrice 平均值的客户
+SELECT Customer FROM Orders
+WHERE OrderPrice>(SELECT AVG(OrderPrice) FROM Orders)
